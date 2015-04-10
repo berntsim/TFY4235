@@ -1,0 +1,38 @@
+FC = gfortran
+
+FCFLAGS = -g -fbounds-check
+FCFLAGS = -O2
+
+PROGRAMS = test, module
+
+!all:	$(PROGRAMS)
+!makedepf90
+!creates a dependency to test, that test is dependent on module
+test: test.o module.o globals.o
+	$(FC) $(FCFLAGS) -o $@ $^ $(LDFLAGS)	
+
+!To make an executable, one first have to make a code file .o which has
+!the same dependencies as the executable test
+test.o: test.f95 module.mod globals.mod
+	$(FC) $(FCFLAGS) -c $<
+
+! The .mod is compiled headers, and are needed to create the code file .o
+! module is not dependent on any other modules, as seen here.
+module.mod module.o: module.f95
+	$(FC) $(FCFLAGS) -c $<
+
+globals.mod globals.o: globals.f95
+	$(FC) $(FCFLAGS) -c $<
+
+! This is to make cleaning easier. Removes all the code files and header files
+! It will not remove any fortran code.
+.PHONY: clean
+clean:
+	rm -f *.o *.mod *.MOD
+
+
+
+
+
+! Save statement for global parameters?
+! Helst ikke seede med tiden? Ikke reproduserbar.
