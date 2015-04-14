@@ -1,0 +1,2 @@
+set yrange [0:2]
+plot "refBoundDiffusivity.dat"using 2:1 w l

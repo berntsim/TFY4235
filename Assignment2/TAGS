@@ -1,0 +1,31 @@
+
+diffusion.f90,779
+SUBROUTINE plot_gnuplot(6,56
+SUBROUTINE optimized_theta_scheme_absorbing_boundaries(11,149
+SUBROUTINE absorbing_boundaries(45,1439
+SUBROUTINE optimized_theta_scheme_reflecting_boundaries(74,3085
+SUBROUTINE reflecting_boundaries(111,4674
+SUBROUTINE vnAbsorbing(139,6319
+SUBROUTINE vnReflecting(150,6573
+SUBROUTINE analytical_solution_absorbing_boundaries(163,6892
+SUBROUTINE analytical_solution_reflecting_boundaries(180,7452
+SUBROUTINE diffusion_profile_heavyside(198,8066
+SUBROUTINE diffusion_profile_constant(215,8571
+SUBROUTINE diffusion_profile_linear(221,8747
+SUBROUTINE CN_scheme_diffusivity(229,8984
+SUBROUTINE absorbing_boundaries_diffusivity(274,10956
+SUBROUTINE CN_scheme_diffusivity_ref(296,12120
+SUBROUTINE reflecting_boundaries_diffusivity(347,14381
+
+wave.f90,163
+SUBROUTINE initXY(6,55
+SUBROUTINE calculate_sines(13,184
+SUBROUTINE initialize_system(20,373
+SUBROUTINE iterate_time(42,1205
+SUBROUTINE wave_equation(56,1632
+
+waveparameters.f90,0
+
+parameters.f90,0
+
+main.f90,0
