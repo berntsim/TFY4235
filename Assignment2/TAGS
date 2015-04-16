@@ -17,12 +17,12 @@ SUBROUTINE absorbing_boundaries_diffusivity(274,10956
 SUBROUTINE CN_scheme_diffusivity_ref(296,12120
 SUBROUTINE reflecting_boundaries_diffusivity(347,14381
 
-wave.f90,163
+wave.f90,161
 SUBROUTINE initXY(6,55
-SUBROUTINE calculate_sines(13,184
-SUBROUTINE initialize_system(20,373
-SUBROUTINE iterate_time(42,1205
-SUBROUTINE wave_equation(56,1632
+SUBROUTINE initialize_system(21,431
+SUBROUTINE iterate_time(53,1635
+SUBROUTINE plot_gnuplot(68,2112
+SUBROUTINE wave_equation(89,2987
 
 waveparameters.f90,0
 
