@@ -11,13 +11,6 @@ SUBROUTINE initXY()
         yPoints = xPoints
 END SUBROUTINE
 
-!SUBROUTINE calculate_sines()
-!        do i = 1,N
-!                sinXVector(i) = dsin(pi*xPoints(i))
-!                sinYVector(i) = dsin(2._wp*pi*yPoints(i))
-!        end do
-!END SUBROUTINE
-
 SUBROUTINE initialize_system()
         integer :: i,j
         uPrev(1,:) = 0._wp
@@ -92,9 +85,9 @@ SUBROUTINE wave_equation()
         call initialize_system()
         print*, Nt/plotInterval
         do i1 = 1,Nt
-                open (unit=out_unit, file="wave.dat") 
                 call iterate_time()
                 if (mod(i1,plotInterval) .eq. 0) then
+                        open (unit=out_unit, file="wave.dat") 
                         do j_we = 1,N
                                 do j1 = 1,N
                                         write(out_unit,*) xPoints(j_we), yPoints(j1), u(j_we,j1)
@@ -103,8 +96,8 @@ SUBROUTINE wave_equation()
                         end do 
                         call plot_gnuplot(pngCounter)
                         pngCounter = pngCounter + 1
+                        Call SYSTEM('rm wave.dat')
                 end if
-                Call SYSTEM('rm wave.dat')
         end do
 END SUBROUTINE
 

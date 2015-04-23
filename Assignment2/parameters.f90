@@ -6,7 +6,7 @@ integer                         :: Nt = 0               !Setting how long the pr
 real(kind=wp), parameter        :: r = 0.25_wp          !For the stability of euler
 integer                         :: i = 0                !iterator
 integer                         :: j = 0                !iterator
-real(kind=wp), parameter        :: t = 5.0_wp              !Setting simulation time
+real(kind=wp), parameter        :: t = 40.0_wp              !Setting simulation time
 real(kind=wp)                   :: dt = 0               !Time iteration step
 real(kind=wp)                   :: dx = 0               !Spatial iteration step
 real(kind=wp)                   :: D = 0.01_wp           !Diffusion constant
@@ -22,12 +22,12 @@ real(kind=wp), parameter        :: xZero = 0.5_wp       !Location of the startin
 real(kind=wp)                   :: K = 0                !Initializing the reduced diffusion constant
 real(kind=wp), parameter        :: theta = 0.5_wp       !Making sure we use the Crank-Nicolson scheme. Set to 1 for Euler.          
 real(kind=wp)                   :: KDiff = 0._wp        !Declaring the constant used in the diffusive matrices
-real(kind=wp), parameter        :: DPluss = 0.1         !Declaring the piecewise constant diffusion coefficients, Heavyside-profile 
-real(kind=wp), parameter        :: DMinus = 0.1         
+real(kind=wp), parameter        :: DPluss = 0.1_wp         !Declaring the piecewise constant diffusion coefficients, Heavyside-profile 
+real(kind=wp), parameter        :: DMinus = 0.1_wp         
 integer, parameter              :: rcc=10**8            !Setting a number for maintaining precission when comparing real(kind=wp) numbers
 real(kind=wp)                   :: xValues
 real(kind=wp),parameter         :: disp = 0             !Setting displacement for the step         
-
+real(kind=wp), parameter        :: alpha = r/2._wp      !Setting constant for CN test scheme
 real(kind=wp) :: dummy = 0
 
 !real(kind=wp)                   :: plotTime = 0.1         !Determining at what time you want to plot the concentration

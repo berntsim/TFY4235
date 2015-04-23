@@ -1,5 +1,7 @@
+advection.o : advection.f90 advectionparameters.o 
+advectionparameters.o : advectionparameters.f90 
 diffusion.o : diffusion.f90 parameters.o 
-main.o : main.f90 wave.o waveparameters.o diffusion.o parameters.o 
+main.o : main.f90 advection.o advectionparameters.o wave.o waveparameters.o diffusion.o parameters.o 
 parameters.o : parameters.f90 
 wave.o : wave.f90 waveparameters.o 
 waveparameters.o : waveparameters.f90 

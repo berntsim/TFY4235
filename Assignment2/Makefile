@@ -1,8 +1,10 @@
 PROG =	Myexe
 
-SRCS =	diffusion.f90 main.f90 parameters.f90 wave.f90 waveparameters.f90
+SRCS =	advection.f90 advectionparameters.f90 diffusion.f90 main.f90 \
+	parameters.f90 wave.f90 waveparameters.f90
 
-OBJS =	diffusion.o main.o parameters.o wave.o waveparameters.o
+OBJS =	advection.o advectionparameters.o diffusion.o main.o parameters.o \
+	wave.o waveparameters.o
 
 C           = gcc
 CFLAGS      = -O

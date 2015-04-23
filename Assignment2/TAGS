@@ -1,31 +1,44 @@
 
-diffusion.f90,779
-SUBROUTINE plot_gnuplot(6,56
-SUBROUTINE optimized_theta_scheme_absorbing_boundaries(11,149
-SUBROUTINE absorbing_boundaries(45,1439
-SUBROUTINE optimized_theta_scheme_reflecting_boundaries(74,3085
-SUBROUTINE reflecting_boundaries(111,4674
-SUBROUTINE vnAbsorbing(139,6319
-SUBROUTINE vnReflecting(150,6573
-SUBROUTINE analytical_solution_absorbing_boundaries(163,6892
-SUBROUTINE analytical_solution_reflecting_boundaries(180,7452
-SUBROUTINE diffusion_profile_heavyside(198,8066
-SUBROUTINE diffusion_profile_constant(215,8571
-SUBROUTINE diffusion_profile_linear(221,8747
-SUBROUTINE CN_scheme_diffusivity(229,8984
-SUBROUTINE absorbing_boundaries_diffusivity(274,10956
-SUBROUTINE CN_scheme_diffusivity_ref(296,12120
-SUBROUTINE reflecting_boundaries_diffusivity(347,14381
+advection.f90,237
+SUBROUTINE initialize(6,65
+SUBROUTINE exact(14,278
+SUBROUTINE LW(22,529
+SUBROUTINE LW_Burger(30,759
+SUBROUTINE plot_gnuplot(40,1109
+SUBROUTINE plot_burger(58,2133
+SUBROUTINE advection_(76,3048
+SUBROUTINE inviscid_burger(102,4056
+
+diffusion.f90,811
+SUBROUTINE plot_diffusion(6,56
+SUBROUTINE optimized_theta_scheme_absorbing_boundaries(11,151
+SUBROUTINE absorbing_boundaries(45,1441
+SUBROUTINE optimized_theta_scheme_reflecting_boundaries(74,3087
+SUBROUTINE reflecting_boundaries(111,4676
+SUBROUTINE vnAbsorbing(139,6321
+SUBROUTINE vnReflecting(150,6575
+SUBROUTINE analytical_solution_absorbing_boundaries(163,6894
+SUBROUTINE analytical_solution_reflecting_boundaries(180,7454
+SUBROUTINE diffusion_profile_heavyside(198,8068
+SUBROUTINE diffusion_profile_constant(215,8561
+SUBROUTINE diffusion_profile_linear(221,8737
+SUBROUTINE CN_test(230,8975
+SUBROUTINE CN_scheme_diffusivity(281,11920
+SUBROUTINE absorbing_boundaries_diffusivity(326,13892
+SUBROUTINE CN_scheme_diffusivity_ref(348,15058
+SUBROUTINE reflecting_boundaries_diffusivity(400,17340
 
 wave.f90,161
 SUBROUTINE initXY(6,55
-SUBROUTINE initialize_system(21,431
-SUBROUTINE iterate_time(53,1635
-SUBROUTINE plot_gnuplot(68,2112
-SUBROUTINE wave_equation(89,2987
+SUBROUTINE initialize_system(14,236
+SUBROUTINE iterate_time(46,1440
+SUBROUTINE plot_gnuplot(61,1917
+SUBROUTINE wave_equation(82,2792
 
 waveparameters.f90,0
 
 parameters.f90,0
 
 main.f90,0
+
+advectionparameters.f90,0

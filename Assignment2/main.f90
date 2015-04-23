@@ -3,6 +3,8 @@ use parameters
 use diffusion
 use waveparameters
 use wave
+use advectionparameters
+use advection
 IMPLICIT NONE
 
 !----------------------Diffusion equation section------------
@@ -14,12 +16,15 @@ IMPLICIT NONE
 !call analytical_solution_reflecting_boundaries()
 
 !call absorbing_boundaries_diffusivity()
-!call reflecting_boundaries_diffusivity()
+call reflecting_boundaries_diffusivity()
 
-!call plot_gnuplot()
+call plot_diffusion()
 !----------------------Wave equation section-----------------
 
-call wave_equation()
+!call wave_equation()
 
+!---------------------Advection equation section-------------
 
+!call advection_()
+!call inviscid_burger()
 END PROGRAM

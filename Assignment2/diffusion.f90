@@ -3,7 +3,7 @@ use parameters
 IMPLICIT NONE
 contains
 
-SUBROUTINE plot_gnuplot()
+SUBROUTINE plot_diffusion()
         Call SYSTEM('gnuplot -p "plotfortran.p"')
 END SUBROUTINE
 
@@ -205,11 +205,11 @@ else
         retVal1_DP = DMinus
 end if
 
-!if (nint(x_DP*rcc) .eq. nint((xZero-disp)*rcc))then
-!        retVal2_DP = DPluss-DMinus
-!else
+if (nint(x_DP*rcc) .eq. nint((xZero-disp)*rcc))then
+        retVal2_DP = 10**8
+else
         retVal2_DP = 0._wp
-!end if
+end if
 END SUBROUTINE
 
 SUBROUTINE diffusion_profile_constant(retVal1_DP,retVal2_DP)
@@ -225,6 +225,58 @@ retVal1_DP = x_DP +0.01
 retVal2_DP = 1._wp
 
 END SUBROUTINE
+
+
+SUBROUTINE CN_test(vector_test)
+        real(kind=wp), dimension(N), intent(inout) :: vector_test
+        real(kind=wp), dimension(N) :: tmp_test
+        real(kind=wp), dimension(N) :: diffusivity, beta
+        real(kind=wp) :: xVal_test = 0._wp
+        integer :: i_test, info_test
+        do i_test = 1,N
+                call diffusion_profile_heavyside(xVal_test,diffusivity(i_test),beta(i_test))
+                !call diffusion_profile_constant(diffusivity(i_test),beta(i_test))
+                !call diffusion_profile_linear(xVal_test,diffusivity(i_test),beta(i_test))
+                xVal_test = xVal_test + 1._wp/N
+        
+        end do
+        print*, diffusivity
+        do i_test = 2,N-1
+                ADiag(i_test) = 1._wp + alpha*theta*(diffusivity(i_test+1) +2._wp* diffusivity(i_test) + diffusivity(i_test-1))
+                BDiag(i_test)=1._wp+alpha*(1._wp - theta)*(-diffusivity(i_test+1)-2._wp* diffusivity(i_test)-diffusivity(i_test-1))
+        end do
+
+        do i_test = 1,N-1
+                AUpDiag(i_test) = -alpha*theta*(diffusivity(i_test)+diffusivity(i_test-1))
+                ALowDiag(i_test) = -alpha*theta*(diffusivity(i_test+1)+diffusivity(i_test))
+                BUpDiag(i_test) = alpha*(1._wp-theta)*(diffusivity(i_test+1) + diffusivity(i_test))
+                BLowDiag(i_test) = alpha*(1._wp-theta)*(diffusivity(i_test) + diffusivity(i_test-1))
+        end do
+
+        Adiag(1) = 1._wp + 2._wp*alpha*theta*(diffusivity(2) + diffusivity(1))
+        BDiag(1) = 1._wp + 2._wp*alpha*(1._wp-theta)*(-diffusivity(1) - diffusivity(2))
+        Adiag(N) = 1._wp + 2._wp*alpha*theta*(diffusivity(N) + diffusivity(N-1))
+        BDiag(N) = 1._wp + 2._wp*alpha*(1._wp-theta)*(-diffusivity(N) - diffusivity(N-1))
+        
+        AUpDiag(1) = -2._wp*alpha*theta*(diffusivity(1) + diffusivity(2))
+        ALowDiag(N-1) = -2._wp*alpha*theta*(diffusivity(N-1) + diffusivity(N))
+        BUpDiag(1) = 2._wp*alpha*(1._wp-theta)*(diffusivity(1) + diffusivity(2))
+        BLowDiag(N-1) = 2._wp*alpha*(1._wp-theta)*(diffusivity(N-1) + diffusivity(N))
+
+        do i_test=1,N                                       !This section is a matrix multiplication for a tridiagonal matrix with a vector, which takes less computating time than matmul
+                if (i_test .eq. 1) then
+                        tmp_test(i_test) = BDiag(i_test)*vector_test(i_test) + BUpDiag(i_test)*vector_test(i_test+1)
+                else if (i_test .eq. N) then
+                        tmp_test(i_test) = BLowDiag(i_test-1)*vector_test(i_test-1) + BDiag(i_test)*vector_test(i_test)
+                else 
+                        tmp_test(i_test) = BLowDiag(i_test-1)*vector_test(i_test-1) + BDiag(i_test)*vector_test(i_test) +&
+                         BUpDiag(i_test)*vector_test(i_test+1)
+                end if
+        end do
+        vector_test=tmp_test
+        call dgtsv(N,1,ALowDiag,ADiag,AUpDiag,vector_test,N,info_test)   
+END SUBROUTINE
+
 
 SUBROUTINE CN_scheme_diffusivity(vector_AB)
 real(kind=wp), dimension(N), intent(inout) :: vector_AB
@@ -277,7 +329,7 @@ dt = r*dx**2            !Setting timestep for euler schemes
 Nt = nint(t/dt)         !Deciding number of iterations to do forward in time
 KDiff = dt/(2*dx*dx)        !Declaring the reduced diffusion coefficient
 uVector = 0._wp         !Setting all elements of the concentration vector to zero
-uVector(int((xZero/L)*(N+1))) = uTilde/dx        !Implementing the starting concentration as a diracs delta-function (approximation, obviously)
+uVector(int((xZero/L)*(N+1))-1) = uTilde/dx        !Implementing the starting concentration as a diracs delta-function (approximation, obviously)
 
 open (unit=out_unit5, file="absBoundDiffusivity.dat")            !Writing inital concentration til file, so that it can be plotted using gnuplot
 write(out_unit5,*) 0._wp, 0._wp
@@ -318,7 +370,7 @@ end do
 
 do i_RB =1,N-1                                    !Initializing the upper and lower diagonals
         BUpDiag(i_RB) = r*(1._wp-theta)*(dx*beta(i_RB) + 2._wp*diffusivity(i_RB))
-        ALowDiag(i_RB) = r*theta*(dx*beta(i_RB+1) - 2._wp*diffusivity(i_RB+1))
+        ALowDiag(i_RB) = r*theta*(dx*beta(i_RB+1) - 2._wp*diffusivity(i_RB+1)) !skal være i_RB +1
         AUpDiag(i_RB) = -r*theta*(dx*beta(i_RB) + 2._wp*diffusivity(i_RB))
         BLowDiag(i_RB) = r*(1._wp-theta)*(-dx*beta(i_RB+1) + 2._wp*diffusivity(i_RB+1))
 end do
@@ -327,6 +379,7 @@ AUpDiag(1) =    -4._wp*r*theta*diffusivity(1)                    !Fixing the ref
 ALowDiag(N-1) = -4._wp*r*theta*diffusivity(N)
 BUpDiag(1) =     4._wp*r*diffusivity(1)*(1._wp-theta)
 BLowDiag(N-1) =  4._wp*r*diffusivity(N)*(1._wp-theta)
+
 
 do i_RB=1,N                                       !This section is a matrix multiplication for a tridiagonal matrix with a vector, which takes less computating time than matmul
         if (i_RB .eq. 1) then
@@ -348,14 +401,15 @@ SUBROUTINE reflecting_boundaries_diffusivity()
 dx = L/(N-1)            !Setting space-step
 dt = r*dx**2            !Setting timestep for euler schemes
 Nt = nint(t/dt)         !Deciding number of iterations to do forward in time
-KDiff = dt/(2*dx*dx)        !Declaring the reduced diffusion coefficient
+KDiff = dt/(2._wp*dx*dx)        !Declaring the reduced diffusion coefficient
 uVector = 0._wp         !Setting all elements of the concentration vector to zero
-uVector(int((xZero/L)*(N+1))) = uTilde/dx        !Implementing the starting concentration as a diracs delta-function (approximation, obviously)
+uVector(int((xZero/L)*(N+1))-1) = uTilde/dx        !Implementing the starting concentration as a diracs delta-function (approximation, obviously)
 
 open (unit=out_unit7, file="refBoundDiffusivity.dat")            !Writing inital concentration til file, so that it can be plotted using gnuplot
 !write(out_unit7,*) 0._wp
 do i = 1,Nt                                                             !Iterating forward in time
         call CN_scheme_diffusivity_ref(uVector)       !Using the theta-scheme implementet above to do the actual calculations
+        !call CN_test(uVector)
 end do
 
 do j = 1,N                                                              !Writing the final concenctration to file
@@ -370,7 +424,6 @@ do j = 1,N                                                              !Writing
         end if
 end do
 !write(out_unit5,*) 0._wp
-!print*, uVector
 
 END SUBROUTINE
 
